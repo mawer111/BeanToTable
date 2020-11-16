@@ -1,0 +1,24 @@
+<idea-plugin>
+    <id>fun_work.tools.bean_to_table.BeanToTable2</id>
+    <name>plugin help generate sql</name>
+    <vendor email="mawerss1@gmail.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+    <description><![CDATA[
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="org.ss.btm.EditorAction" class="funwork.tools.btt.EditorAction" text="BeanToTable"
+                description="generate create table sql">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>
