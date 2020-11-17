@@ -4,6 +4,7 @@ import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiType;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -46,9 +47,20 @@ public class CreateTableStatement {
     }
 
     public void appendField(PsiField field, String type, Integer length) {
-        bd.append(convertToBaseLine(field.getName()));
+        bd.append(getColumnName(field));
         bd.append(" ").append(type);
         visitAnnontation(type,field);
+    }
+
+    public String getColumnName(PsiField psiField) {
+        PsiAnnotation columnAt = psiField.getAnnotation("javax.persistence.Column");
+        if (columnAt != null) {
+            String name = AnnotationUtil.getStringAttributeValue(columnAt, "name");
+            if (StringUtils.isNotEmpty(name)) {
+                return name;
+            }
+        }
+        return convertToBaseLine(psiField.getName());
     }
 
     public void visitAnnontation(String type, PsiField field) {
@@ -61,6 +73,12 @@ public class CreateTableStatement {
         if (columnAt != null) {
             Long length = AnnotationUtil.getLongAttributeValue(columnAt, "length");
             bd.append("(").append(length).append(") ");
+            Boolean nullable = AnnotationUtil.getBooleanAttributeValue(columnAt, "nullable");
+            if (nullable != null && !nullable) {
+                bd.append("not null");
+            }else{
+                bd.append("null");
+            }
         }
         if (idAt != null) {
             bd.append(" primary key");
